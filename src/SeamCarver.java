@@ -4,10 +4,12 @@ import edu.princeton.cs.algs4.IndexMinPQ;
 import edu.princeton.cs.algs4.Picture;
 
 public class SeamCarver {
+	//Instance variables
 	private Picture picture;
 	private double[][] energy;
 	private int[][] colorPix;
-
+	
+	//Constructor
 	public SeamCarver(Picture picture) {
 		if (picture == null) {
 			throw new java.lang.IllegalArgumentException();
@@ -17,15 +19,7 @@ public class SeamCarver {
 
 	}
 
-	/*
-	 * public void showEnergy() { for (double[] row : energy) {
-	 * System.out.println(Arrays.toString(row)); }
-	 * 
-	 * }
-	 * 
-	 * public void showRgb() { for (int[] row : colorPix) {
-	 * System.out.println(Arrays.toString(row)); } }
-	 */
+
 	public Picture picture() {
 		
 		Picture val= new Picture(picture);
