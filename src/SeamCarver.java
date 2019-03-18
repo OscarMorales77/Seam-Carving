@@ -4,12 +4,13 @@ import edu.princeton.cs.algs4.IndexMinPQ;
 import edu.princeton.cs.algs4.Picture;
 
 public class SeamCarver {
-	//Instance variables
-	private Picture picture;
-	private double[][] energy;
-	private int[][] colorPix;
-	
-	//Constructor
+	// Instance variables
+	private Picture picture; // current instance of picture after applying algorithm (seam removal)
+	private double[][] energy; // Energy of a pixel- a measure of the relative importance of each pixel
+	private int[][] colorPix; // RGB color of pixel as an integer -represents the current picture as int RGB
+								// values
+
+	// Constructor
 	public SeamCarver(Picture picture) {
 		if (picture == null) {
 			throw new java.lang.IllegalArgumentException();
@@ -19,23 +20,26 @@ public class SeamCarver {
 
 	}
 
-
+	// current picture
 	public Picture picture() {
-		
-		Picture val= new Picture(picture);
+
+		Picture val = new Picture(picture);
 		return val;
 	}
 
+	// width of picture
 	public int width() {
 
 		return picture.width();
 	}
 
+	// height of picture
 	public int height() {
 
 		return picture.height();
 	}
 
+	// Energy of a given pixel
 	public double energy(int x, int y) {
 
 		if (x < 0 || y < 0 || x >= width() || y >= height()) {
@@ -47,17 +51,16 @@ public class SeamCarver {
 	}
 
 	public void removeHorizontalSeam(int[] seam) {
-		if (seam == null || seam.length != width()||checkValidSeam(seam)||height()<=1) {
+		if (seam == null || seam.length != width() || checkValidSeam(seam) || height() <= 1) {
 			throw new IllegalArgumentException();
 		}
-		
+
 		for (int i = 0; i < seam.length; i++) {
-			if (seam[i]<0|| seam[i]>=height()) {
+			if (seam[i] < 0 || seam[i] >= height()) {
 				throw new IllegalArgumentException();
 			}
 		}
 
-		
 		colorPix = trasposeMatrix(colorPix);
 		energy = trasposeMatrix(energy);
 
@@ -106,17 +109,18 @@ public class SeamCarver {
 	}
 
 	public void removeVerticalSeam(int[] seam) {
-		
+		// Exception handling-corner cases
 		for (int i = 0; i < seam.length; i++) {
-			if (seam[i]<0|| seam[i]>=width()) {
+			if (seam[i] < 0 || seam[i] >= width()) {
 				throw new IllegalArgumentException();
 			}
 		}
-
-		if (seam == null || seam.length != height()||checkValidSeam(seam)||width()<=1) {
+		//// Exception handling-corner cases
+		if (seam == null || seam.length != height() || checkValidSeam(seam) || width() <= 1) {
 			throw new IllegalArgumentException();
 		}
-
+		
+		//current color pixel representation after seam has been removed
 		int[][] temp = new int[colorPix.length][colorPix[0].length - 1];
 
 		for (int i = 0; i < temp.length; i++) {
@@ -149,7 +153,8 @@ public class SeamCarver {
 		}
 
 		picture = other;
-
+		
+		//re-calculate the energy of picture after seam removal
 		computeEnergy();
 
 	}
@@ -160,7 +165,7 @@ public class SeamCarver {
 
 		int[] rever = findVerticalSeam();
 		energy = trasposeMatrix(energy);
-		
+
 		return rever;
 	}
 
@@ -180,6 +185,8 @@ public class SeamCarver {
 		return getArray(prev, row * col + 1, row * col);
 	}
 
+	// An implementation of the dual-gradient energy function to find the relative
+	// importance of a pixel
 	private void computeEnergy() {
 		energy = new double[picture.height()][picture.width()];
 		colorPix = new int[picture.height()][picture.width()];
@@ -244,6 +251,7 @@ public class SeamCarver {
 
 	//////////////// --->Algorithms<------//////////////////////////////////////////////////////////
 
+	// Maps a two-dimensional matrix to a 1D space (part of the algorithm)
 	private int map1D(int r, int c) {
 		int col = energy[0].length;
 
@@ -251,6 +259,8 @@ public class SeamCarver {
 
 	}
 
+	// check that the given row (r) and column (c) are within bounds of the energy
+	// matrix
 	private boolean inBounds(int r, int c) {
 		if (r < energy.length && c < energy[0].length && r >= 0 && c >= 0) {
 
@@ -260,7 +270,7 @@ public class SeamCarver {
 		}
 
 	}
-
+	//find the edge weight for the given vertex
 	private double edgeWeight(int n) {
 
 		int row = energy.length;
@@ -274,7 +284,7 @@ public class SeamCarver {
 
 		return energy[r][c];
 	}
-
+	// for the given vertex, fill all of its neighbors
 	private Iterable<Integer> getNeighbors(int n) {
 
 		Bag<Integer> neighbors = new Bag<>();
@@ -313,7 +323,7 @@ public class SeamCarver {
 		}
 
 	}
-
+	//Fin the least significant seam using Dijkstra's Algorithm
 	private void dijkstra(int start, int end, double[] distTo, int[] edgeTo) {
 
 		IndexMinPQ<Double> pq = new IndexMinPQ<>(energy.length * energy[0].length + 2);
@@ -394,17 +404,15 @@ public class SeamCarver {
 
 		return trasposedMatrix;
 	}
-	
-	private boolean checkValidSeam(int[] seam)
-	{
-		for (int i = 0; i < seam.length-1; i++) {
-			if (Math.abs(seam[i+1] - seam[i]) > 1) {
+
+	//// Exception handling-corner cases
+	private boolean checkValidSeam(int[] seam) {
+		for (int i = 0; i < seam.length - 1; i++) {
+			if (Math.abs(seam[i + 1] - seam[i]) > 1) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
-	
 
 }

@@ -22,7 +22,7 @@ public class runTest {
 	
 	}
 
-	public static void main(String[] args) {
+	public static void mainOld2(String[] args) {
 	
 			
 	
