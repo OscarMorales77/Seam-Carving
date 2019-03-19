@@ -284,7 +284,7 @@ public class SeamCarver {
 
 		return energy[r][c];
 	}
-	// for the given vertex, fill all of its neighbors
+	// for the given vertex, find all of its neighbors
 	private Iterable<Integer> getNeighbors(int n) {
 
 		Bag<Integer> neighbors = new Bag<>();
@@ -323,7 +323,7 @@ public class SeamCarver {
 		}
 
 	}
-	//Fin the least significant seam using Dijkstra's Algorithm
+	//Find the least significant seam using Dijkstra's Algorithm
 	private void dijkstra(int start, int end, double[] distTo, int[] edgeTo) {
 
 		IndexMinPQ<Double> pq = new IndexMinPQ<>(energy.length * energy[0].length + 2);
